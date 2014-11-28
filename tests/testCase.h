@@ -10,13 +10,20 @@ typedef struct
 	int totalTests;
 	int failedTests;
 
-	char *errorLog;
+	char errorLog[ERROR_LOG_LEN];
 	int curErrorLogIndex;
 } testResult_t;
 
-void initializeTestResult (testResult_t *result)
+testResult_t *initializeTestResult ()
 {
-	memset(result, 0, sizeof(testResult_t));
+	testResult_t *result;
+	result = (testResult_t *) malloc(sizeof(testResult_t));
+	return result;
+}
+
+void freeTestResult (testResult_t *result)
+{
+	free(result);
 }
 
 void assert (bool exprResult, char *msg, testResult_t *result)
@@ -39,13 +46,15 @@ void printTestResult (testResult_t *result)
 {
 	if (result->failedTests)
 	{
-		fprintf(stdout, " ~~~~~ TEST FAILED ~~~~~ \n");
+		fprintf(stdout, " ~~~~~ TEST FAILED ~~~~~~~~ \n");
+	} else {
+		fprintf(stdout, " ~~~~~ TEST SUCCEEDED ~~~~~ \n");
 	}
 	
-	fprintf(stdout, "Total Tests: %d \nTests Succeeded: %d \n Tests Failed: %d\n", result->totalTests, result->totalTests - result->failedTests, result->failedTests);
+	fprintf(stdout, "  Total Tests: %d \n  Tests Succeeded: %d \n  Tests Failed: %d\n", result->totalTests, result->totalTests - result->failedTests, result->failedTests);
 	
 	if (result->failedTests)
 	{
-		fprintf(stdout, "Error Log: \n %s", result->errorLog);
+		fprintf(stdout, "Error Log: \n %s\n", result->errorLog);
 	}
 }

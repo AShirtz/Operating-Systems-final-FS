@@ -7,7 +7,7 @@ FILE_SYSTEM_OBJS = \
 all: fileSystem testCase
 
 clean:
-	rm artifacts/* target/*
+	rm artifacts/* target/* vdisk
 
 testCase:
 	$(CC) $(CFLAGS) tests/testCase1.c -o target/compileTest 
