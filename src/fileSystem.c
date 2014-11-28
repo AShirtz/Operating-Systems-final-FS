@@ -1,22 +1,21 @@
 #include "fileSystem.h"
 
 FILE *createDisk();
+diskController_t *initializeDiskController();
 
-int main ()
+diskController_t *initializeDiskController()
 {
-
-	fprintf(stdout, "Size of dirBlock: %d\n", sizeof(dirBlock_t));
-	fprintf(stdout, "Size of SuperBlock: %d\n", sizeof(superBlock_t));
-	fprintf(stdout, "Size of fileBlock: %d\n", sizeof(fileBlock_t));
-	createDisk();
-	fprintf(stdout, "%s", "Created disk");
+	diskController_t *diskCont;
+	diskCont = malloc(sizeof(diskCont));
+	diskCont->vdisk = createDisk();
+	return diskCont;
 }
 
 FILE *createDisk ()
 {
 	FILE *vdisk;
 	vdisk = fopen("vdisk", "w+");
-	system("dd if=/dev/zero of=vdisk bs=1024 count=1");
+	system("dd if=/dev/zero of=vdisk bs=1024 count=8128");
 	return vdisk;
 }
 

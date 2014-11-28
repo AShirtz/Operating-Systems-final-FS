@@ -51,6 +51,16 @@ typedef struct
 	activeFile_t	*file;
 } fileDescriptor_t;
 
+/*
+	Controllers
+*/
+
+typedef struct
+{
+	FILE *vdisk;
+	
+} diskController_t;
+
 typedef struct
 {
 	fileDescriptor_t	activeFiles[MAX_OPEN_FILES];
