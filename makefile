@@ -2,7 +2,7 @@ CC 	= gcc
 CFLAG 	= -g
 
 FILE_SYSTEM_OBJS = fileSystem.o
-TEST_CASE_OBJS = 2tc.o
+TEST_CASE_OBJS = 4tc.o
 
 all: testCases
 
@@ -10,7 +10,7 @@ clean:
 	rm artifacts/* target/* vdisk
 
 testCases: artifacts/$(TEST_CASE_OBJS) artifacts/$(FILE_SYSTEM_OBJS)
-	$(CC) $(CFLAGS) artifacts/2tc.o artifacts/$(FILE_SYSTEM_OBJS) -o target/2tc
+	$(CC) $(CFLAGS) artifacts/4tc.o artifacts/$(FILE_SYSTEM_OBJS) -o target/4tc
 
 fileSystem: artifacts/$(FILE_SYSTEM_OBJS)
 	$(CC) $(CFLAGS) artifacts/fileSystem.o -o target/output
