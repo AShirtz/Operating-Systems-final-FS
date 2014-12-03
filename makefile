@@ -1,22 +1,29 @@
-CC 	= gcc
+CC 	= clang
 CFLAG 	= -g
 
 FILE_SYSTEM_OBJS = fileSystem.o
-TEST_CASE_OBJS = 4tc.o
+TEST_CASE_OBJS = \
+	1tc.o \
+	2tc.o \
+	3tc.o \
+	4tc.o \
+	5tc.o \
+	6tc.o \
+	7tc.o
 
 all: testCases
 
 clean:
-	rm artifacts/* target/* vdisk
+	rm *.o target/* vdisk
 
-testCases: artifacts/$(TEST_CASE_OBJS) artifacts/$(FILE_SYSTEM_OBJS)
-	$(CC) $(CFLAGS) artifacts/4tc.o artifacts/$(FILE_SYSTEM_OBJS) -o target/4tc
+testCases: $(TEST_CASE_OBJS) $(FILE_SYSTEM_OBJS)
+	$(CC) $(CFLAGS) 1tc.o $(FILE_SYSTEM_OBJS) -o target/1tc
+	$(CC) $(CFLAGS) 2tc.o $(FILE_SYSTEM_OBJS) -o target/2tc
+	$(CC) $(CFLAGS) 3tc.o $(FILE_SYSTEM_OBJS) -o target/3tc
+	$(CC) $(CFLAGS) 4tc.o $(FILE_SYSTEM_OBJS) -o target/4tc
+	$(CC) $(CFLAGS) 5tc.o $(FILE_SYSTEM_OBJS) -o target/5tc
+	$(CC) $(CFLAGS) 6tc.o $(FILE_SYSTEM_OBJS) -o target/6tc
+	$(CC) $(CFLAGS) 7tc.o $(FILE_SYSTEM_OBJS) -o target/7tc
 
-fileSystem: artifacts/$(FILE_SYSTEM_OBJS)
-	$(CC) $(CFLAGS) artifacts/fileSystem.o -o target/output
-
-artifacts/%.o: src/%.c
-	$(CC) -c $(CFLAGS) $< -o $@
-
-artifacts/%.o: tests/%.c
+%.o: src/%.c
 	$(CC) -c $(CFLAGS) $< -o $@

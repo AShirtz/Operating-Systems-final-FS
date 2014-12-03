@@ -5,10 +5,11 @@ int main ()
 {
 	testResult_t *result = initializeTestResult();
 
-	diskController_t *dC = initializeDiskController();
+//	diskController_t *dC = initializeDiskController();
+	getFS();
 	superBlock_t sBCopy;
 	fprintf(stdout, "Pre read\n");
-	readBlockFromDisk(dC, 0, &sBCopy);
+	readBlockFromDisk(0, &sBCopy);
 	fprintf(stdout, "Post read\n");
 	
 	assert(sBCopy.numBlocks == 100, "NumBlocks test.\n", result);
@@ -16,13 +17,13 @@ int main ()
 
 	dirBlock_t rDCopy;
 	fprintf(stdout, "Pre read\n");
-	readBlockFromDisk(dC, 1, &rDCopy);
+	readBlockFromDisk(1, &rDCopy);
 	fprintf(stdout, "Post read\n");
 
 	assert(rDCopy.entryCount == 0, "RootDir file count test.\n", result);
 	assert(rDCopy.continuationDirBlockNum == -1, "Continuation block num test.\n", result);	
 
-	freeDiskController(dC);
+//	freeDiskController(dC);
 	printTestResult(result);
 	freeTestResult(result);
 	return 0;
