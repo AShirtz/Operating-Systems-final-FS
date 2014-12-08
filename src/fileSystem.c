@@ -55,6 +55,14 @@ void freeFS()
 	fileSystem_t *FS = getFS();
 	freeDiskController(FS->diskCont);
 	freeActiveDirectory(FS->activeDir);
+	int i;
+	for (i = 0; i < 8; i++)
+	{
+		if (FS->activeFilesBitmap & (1 << i))
+		{
+			freeActiveFile(FS->activeFiles[i]);
+		}
+	}
 	free(FS->superBlock);
 	free(FS);
 }
@@ -275,6 +283,7 @@ bool createContFileBlock(activeFile_t *aF)
 	writeDirect(&firstFreeBlock, sizeof(int), bL->blockNum, offsetof(fileBlock_t, contBlockNum));
 	newBL->blockNum = firstFreeBlock;
 
+	free(fB);
 	return true;
 }
 

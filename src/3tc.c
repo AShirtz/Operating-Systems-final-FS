@@ -12,7 +12,7 @@ int main ()
 	readBlockFromDisk(0, &sBCopy);
 	fprintf(stdout, "Post read\n");
 	
-	assert(sBCopy.numBlocks == 100, "NumBlocks test.\n", result);
+	assert(sBCopy.numBlocks == 104, "NumBlocks test.\n", result);
 	assert(sBCopy.rootDirBlockNum == 1, "RootDirIndex test.\n", result);
 
 	dirBlock_t rDCopy;
