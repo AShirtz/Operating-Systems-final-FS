@@ -21,7 +21,7 @@ int main ()
 	fprintf(stdout, "Post read\n");
 
 	assert(rDCopy.entryCount == 0, "RootDir file count test.\n", result);
-	assert(rDCopy.continuationDirBlockNum == -1, "Continuation block num test.\n", result);	
+	assert(rDCopy.continuationDirBlockNum == 0, "Continuation block num test.\n", result);	
 
 //	freeDiskController(dC);
 	printTestResult(result);

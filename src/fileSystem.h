@@ -3,13 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 #define BLOCK_SIZE 1024
-#define MAX_OPEN_FILES 10
+#define MAX_OPEN_FILES 8
 #define MAX_BLOCK_COUNT 8096 
 
 #define DIR_BLOCK_ENTRY_LENGTH 996
 #define MAX_PATH_LENGTH 100
+#define MAX_ENTRY_COUNT	40
 
 #define FILE_BLOCK_DATA_SIZE 996
 #define	NAME_SIZE 16
@@ -28,7 +30,7 @@ typedef struct superBlock
 	int		blockType;
 	int 		numBlocks;
 	int		rootDirBlockNum;
-	char 		freeBlockBitmap[MAX_BLOCK_COUNT / 8];
+	char 		blockBitmap[MAX_BLOCK_COUNT / 8];
 } superBlock_t;
 
 typedef struct dirBlock
@@ -36,7 +38,7 @@ typedef struct dirBlock
 	int		blockType;
 	char 		name[NAME_SIZE];
 	int		entryCount;
-	int		continuationDirBlockNum;
+	int		continuationDirBlockNum;	//NOTE: this has been deprecated
 	char		entries[DIR_BLOCK_ENTRY_LENGTH];
 					//NOTE: The format for entry listings is as such
 					//	name,blockType,blockNum;name,blockType,blockNum; ... 
@@ -47,7 +49,7 @@ typedef struct fileBlock
 	int		blockType;
 	char		name[NAME_SIZE];
 	int 		internalFileSize;
-	int		continuationFileBlockNum;
+	int		contBlockNum;
 	char		data[FILE_BLOCK_DATA_SIZE];
 } fileBlock_t;
 
@@ -55,25 +57,26 @@ typedef struct fileBlock
 	Objects
 */
 
+typedef struct blockLink
+{
+	int 			blockNum;
+	struct blockLink	*nextLink;
+} blockLink_t;
+
 typedef struct
 {
+	char		name[NAME_SIZE];
 	int		curContentsPtr;
-	fileBlock_t	*fileHeadBlock;
+	int		fileSize;
+	blockLink_t	*fileHeadLink;
 } activeFile_t;
 
-typedef struct
+typedef struct directoryEntry
 {
-	int 		fd;
-	activeFile_t	*file;
-} fileDescriptor_t;
-
-
-
-typedef struct
-{
-	char	name[NAME_SIZE];
-	int	blockType;
-	int	startingBlockNum;
+	char			name[NAME_SIZE];
+	int			blockType;
+	int			startingBlockNum;
+	struct directoryEntry	*nextEntry;
 } directoryEntry_t;
 
 typedef struct
@@ -96,8 +99,8 @@ typedef struct
 
 typedef struct
 {
-	fileDescriptor_t	activeFiles[MAX_OPEN_FILES];
-	int			numActiveFiles;
+	activeFile_t		*activeFiles[MAX_OPEN_FILES];
+	char			activeFilesBitmap;
 	diskController_t	*diskCont;
 	activeDir_t		*activeDir;
 	superBlock_t		*superBlock;

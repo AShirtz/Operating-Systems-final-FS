@@ -9,7 +9,9 @@ TEST_CASE_OBJS = \
 	4tc.o \
 	5tc.o \
 	6tc.o \
-	7tc.o
+	7tc.o \
+	8tc.o \
+	realtc.o
 
 all: testCases
 
@@ -24,6 +26,8 @@ testCases: $(TEST_CASE_OBJS) $(FILE_SYSTEM_OBJS)
 	$(CC) $(CFLAGS) 5tc.o $(FILE_SYSTEM_OBJS) -o target/5tc
 	$(CC) $(CFLAGS) 6tc.o $(FILE_SYSTEM_OBJS) -o target/6tc
 	$(CC) $(CFLAGS) 7tc.o $(FILE_SYSTEM_OBJS) -o target/7tc
+	$(CC) $(CFLAGS) 8tc.o $(FILE_SYSTEM_OBJS) -o target/8tc
+	$(CC) $(CFLAGS) realtc.o $(FILE_SYSTEM_OBJS) -o target/realtc
 
 %.o: src/%.c
 	$(CC) -c $(CFLAGS) $< -o $@
